@@ -438,7 +438,7 @@ if ($cedulaRepresentanteLegal!=''&& $nombreEstablecimiento!='') {
     $estructuraConducAgua,$sistemaRiego,$manoObraSuficiente, $tipoViaAcceso,$energiaElectrica,$aguaPotable,$letrina,$centroSaludCerca,$nivelacionLaserTerreno,$limitantesParcela,
     $observaciones,$cantCabezaGanado,$cantTareasPasturas,$cantPotreros,$cantVacasOrdenioProd,$cantVacasHorras,$cantNovAniojas,$canBecerras,$cantBecerros,
     $cantNovillasPeniadasyMonta,$cantOrdeniosDia,$ordeniaApoyadoBecerros,$prodLtsLecheDiaAnt,$cantVacascnBecerros,$cantBecerrosDetestado,$cantNovillosEngorde,
-    $cantCabezasPorcinas,$cantCabezasOvinoCaprino,$cantPadrotes,$cantMadresCaprino,$cantAves,$cantGallinasPonedoras,$cantGallinasEngorde,
+    $cantCabezasPorcinas,$cantMadresPorcinas,$cantCabezasOvinoCaprino,$cantPadrotes,$cantMadresCaprino,$cantAves,$cantGallinasPonedoras,$cantGallinasEngorde,
     $cantReproductorasPesadas,$cantReproductorasLivianas,$cantConejos,$cantMadresCuniculas,$cantColmenaresRustica,$cantColmenaresModerna,
     $nombresRepresentanteLegal,$apellidosRepresentanteLegal,$cedulaRepresentanteLegal,$generoRepresentanteLegal,$nacionalidadRepresentanteLegal,$pasaporteRepresentanteLegal,
     $fechaNacimietoRepresentanteLegal,$razonSocial,$RNC,'',$areaVarias,$finalidadPrincipal,$finalidad1,$finalidad2,$finalidad3,$finalidad4,
