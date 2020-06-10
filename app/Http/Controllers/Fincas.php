@@ -342,7 +342,7 @@ if ($cedulaRepresentanteLegal!=''&& $nombreEstablecimiento!='') {
      [0,0,$curdate,$curdate,'0',$nombreEstablecimiento,$direccionEstablecimiento,$provinciaEstablecimiento,$municipioEstablecimiento,$distrito,$seccion,$barrioParaje,'',
        $latitud,$longitud,$altitud,$areaProdAnimal,$areaProdAgricola,$areaAcuicultura,$areaBosqueOForestal,$areaInfraEstructura,$areaTotal,$clasificacion,$cantFamiliaresParticipanProd,
        $cantEmpleadosFijos,$mercadoDestinoProduccion,$parcelaReformaAgraria,$formaPosesion,$formaUsufructo,$tipoSuperficie,$fuenteAbastAgua,$metodoAbastAgua,
-    $estructuraConducAgua,$sistemaRiego,$manoObraSuficiente, $tipoViaAcceso,$energiaElectrica,$aguaPotable,$letrina,$centroSaludCerca,$limitantesParcela,
+    $estructuraConducAgua,$sistemaRiego,$manoObraSuficiente, $tipoViaAcceso,$energiaElectrica,$aguaPotable,$letrina,$centroSaludCerca,$nivelacionLaserTerreno,$limitantesParcela,
     $observaciones,$cantCabezaGanado,$cantTareasPasturas,$cantPotreros,$cantVacasOrdenioProd,$cantVacasHorras,$cantNovAniojas,$canBecerras,$cantBecerros,
     $cantNovillasPeniadasyMonta,$cantOrdeniosDia,$ordeniaApoyadoBecerros,$prodLtsLecheDiaAnt,$cantVacascnBecerros,$cantBecerrosDetestado,$cantNovillosEngorde,
     $cantCabezasPorcinas,$cantCabezasOvinoCaprino,$cantPadrotes,$cantMadresCaprino,$cantAves,$cantGallinasPonedoras,$cantGallinasEngorde,
