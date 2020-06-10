@@ -217,6 +217,11 @@ $nort = $data['nort'];
 $observaciones = $data['observaciones'];
 $ordeniaApoyadoBecerros = $data['ordeniaApoyadoBecerros'];
 $parcelaReformaAgraria = $data['parcelaReformaAgraria'];
+if($parcelaReformaAgraria=="1"){
+    $parcelaReformaAgraria = true;
+}else{
+    $parcelaReformaAgraria = false;
+}
 $pasaporteRepresentanteLegal = $data['pasaporteRepresentanteLegal'];
 $prodLtsLecheDiaAnt = $data['prodLtsLecheDiaAnt'];
 $provinciaEstablecimiento = $data['provinciaEstablecimiento'];
