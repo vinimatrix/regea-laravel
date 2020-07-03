@@ -40,9 +40,10 @@ Route::get('grafico/get/{region?}/{provincia?}/{municipio?}/{distrito?}/{seccion
  *
  *
  * * */
+Route::get('fincas/get/id/{id}','Fincas@get');
 Route::get('fincas/list/general/{region}/{provincia?}/{municipio?}/{distrito?}/{seccion?}/{barrio?}','Fincas@ListGeneral');
-Route::get('actividades/list','Fincas@listActividades');
 Route::post('fincas/create','Fincas@create');
+Route::get('fincas/get/with-prod/{region?}/{provincia?}/{municipio?}/{distrito?}/{seccion?}/{barrio?}','Fincas@getfincasWithProd');
 
 
 /***************************
@@ -56,3 +57,11 @@ Route::get('municipios/list/{provincia}','DivisionTerritorial@ListMunicipios');
 Route::get('distritos/list/{provincia}/{municipio}','DivisionTerritorial@ListDistritos');
 Route::get('secciones/list/{provincia}/{municipio}/{distrito}', 'DivisionTerritorial@ListSecciones');
 Route::get('barrios/list/{provincia}/{municipio}/{distrito}/{seccion}', 'DivisionTerritorial@ListBarrioParaje');
+
+//////////////////////////UTILITARIOS////////////////
+Route::get('actividades/list','Fincas@listActividades');
+Route::get('nacionalidad/list','DivisionTerritorial@ListaNacionalidad');
+Route::get('query-builder/{tabla}/{campo}/{signo}/{valor}/{valor2?}/{and?}/{region?}/{provincia?}/{municipio?}','querymaker@FunctionName');
+Route::get('certificado-finca',function(){
+    return redirect()->route('certificado-finca');
+});

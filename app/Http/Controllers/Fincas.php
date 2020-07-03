@@ -20,11 +20,12 @@ class Fincas extends Controller
         return DB::table('fincas')->where('REG',$region)->get();
     }
     public function ByProvincia(string $provincia){
+
         return DB::table('fincas')->where('provinciaEstablecimiento',$provincia)->get();
     }
     public function ByMunicipio(string $provincia,string $municipio){
-        return DB::table('fincas')->where('provinciaEstablecimiento',$provincia,true)
-        ->where('municipioEstablecimiento',$municipio)->get();
+        $sql = DB::raw("SELECT * FROM fincas WHERE municipioEstablecimiento= '$municipio' AND provinciaEstablecimiento ='$provincia'");
+        return DB::select($sql);
     }
     public function ByDistrito(string $provincia,string $municipio,string $distrito){}
     public function BySeccion(string $provincia,string $municipio,string $distrito,string $seccion){}
@@ -63,12 +64,17 @@ public function listActividades(){
 }
     ///////CRUD//////////
 
-    public function get($finca){}
-    public function create(Request $request){
+
+        public function create(Request $request){
         $data = $request->json()->all();
         $nombreEstablecimiento = $data['nombreEstablecimiento'];
         $RNC = $data['RNC'];
         $aguaPotable = $data['aguaPotable'];
+        if($aguaPotable=="1"){
+            $aguaPotable = true;
+        }else{
+            $aguaPotable = false;
+        }
         $altitud = $data['altitud'];
         $apellidosRepresentanteLegal = $data['apellidosRepresentanteLegal'];
         $areaAcuicultura = $data['areaAcuicultura'];
@@ -115,6 +121,11 @@ public function listActividades(){
         $catEmplFijos = $data['catEmplFijos'];
         $cedulaRepresentanteLegal = $data['cedulaRepresentanteLegal'];
         $centroSaludCerca = $data['centroSaludCerca'];
+        if($centroSaludCerca=="1"){
+            $centroSaludCerca = true;
+        }else{
+            $centroSaludCerca = false;
+        }
         $certBuenasPracticas = $data['certBuenasPracticas'];
         $certBuenasPracticasCb = $data['certBuenasPracticasCb'];
         $certificacionOrganica = $data['certificacionOrganica'];
@@ -134,8 +145,13 @@ $direccionEstablecimiento = $data['direccionEstablecimiento'];
 $distrito = $data['distrito'];
 $east = $data['east'];
 $energiaElectrica = $data['energiaElectrica'];
+if($energiaElectrica=="1"){
+    $energiaElectrica = true;
+}else{
+    $energiaElectrica = false;
+}
 $estructuraConducAgua = $data['estructuraConducAgua'];
-$fechaNacimietoRepresentanteLegal = $data['fechaNacimietoRepresentanteLegal'];
+$fechaNacimietoRepresentanteLegal = '2020-06-24 00:00:00';//$data['fechaNacimietoRepresentanteLegal'];
 $finalidad1 = $data['finalidad1'];
 $finalidad2 = $data['finalidad2'];
 $finalidad3 = $data['finalidad3'];
@@ -153,6 +169,11 @@ $institucionFinanciamientoCb = $data['institucionFinanciamientoCb'];
 $latitud = $data['latitud'];
 $latitudUTM = $data['latitudUTM'];
 $letrina = $data['letrina'];
+if($letrina=="1"){
+    $letrina = true;
+}else{
+    $letrina = false;
+}
 $lim1 = $data['lim1'];
 $lim2 = $data['lim2'];
 $lim3 = $data['lim3'];
@@ -211,6 +232,11 @@ if($nacionalidadRepresentanteLegal=="otra"){
     $nacionalidadRepresentanteLegal = $data->cedulaRepresentanteLegalOtra;
 }
 $nivelacionLaserTerreno = $data['nivelacionLaserTerreno'];
+if($nivelacionLaserTerreno=="1"){
+    $nivelacionLaserTerreno= true;
+}else{
+    $nivelacionLaserTerreno = false;
+}
 $nombreEstablecimiento = $data['nombreEstablecimiento'];
 $nombresRepresentanteLegal = $data['nombresRepresentanteLegal'];
 $nort = $data['nort'];
@@ -435,7 +461,7 @@ if ($cedulaRepresentanteLegal!=''&& $nombreEstablecimiento!='') {
     ?,
     ?,
     ?,
-    ?,
+    ?
     )',
      [0,0,$curdate,$curdate,'0',$nombreEstablecimiento,$direccionEstablecimiento,$provinciaEstablecimiento,$municipioEstablecimiento,$distrito,$seccion,$barrioParaje,'',
        $latitud,$longitud,$altitud,$areaProdAnimal,$areaProdAgricola,$areaAcuicultura,$areaBosqueOForestal,$areaInfraEstructura,$areaTotal,$clasificacion,$cantFamiliaresParticipanProd,
@@ -450,9 +476,14 @@ if ($cedulaRepresentanteLegal!=''&& $nombreEstablecimiento!='') {
     '',$cantNovillosAniojos,'',$institucionFinanciamiento,$seguroAgricola,$contratoMercado,$certificacionOrganica,$certBuenasPracticas]);
 if($sql>0){
     $id = DB::getPdo()->lastInsertId();
-    $u =DB::update("update fincas set CUE = DB::raw('CONCAT('214',provinciaEstablecimiento,municipioestablecimiento,LPAD(ID,6,0))') where ID = ?", [$id]);
+    $raw = DB::raw( "SELECT CONCAT('214',provinciaEstablecimiento,municipioestablecimiento,LPAD(ID,6,0)) as CUE from fincas WHERE ID='$id'");
+    $raw = DB::select($raw);
+    $raw = $raw[0];
+    //echo $raw->CUE;
+    $u =DB::update("update fincas set CUE = '$raw->CUE' where ID = ?", [$id]);
     if($u>0){
-        return response()->json($data);
+       $data = DB::table('fincas')->where('ID',$id)->get();
+        return response()->json($data[0]);
     }
 }else{
     return "error";
@@ -462,5 +493,86 @@ if($sql>0){
     }
     public function update($data,$finca){}
     public function detele($finca){}
+
+
+    public function get($id){
+     $sql = DB::raw("SELECT
+     fincas.*,
+     provcenso2010.TOPONIMIA as PROVINCIA,
+     muncenso2010.TOPONIMIA as MUNICIPIO,
+     dmcenso2010.TOPONIMIA as DISTRITO,
+     seccenso2010.TOPONIMIA as SECCION,
+     bpcenso2010.TOPONIMIA as BARRIO,
+     productores_new.apellidos,
+     productores_new.apodo,
+     productores_new.telefono,
+     productores_new.celular,
+     productores_new.correo,
+     productores_new.Fecha_Nacimiento,
+     productores_new.cedula,
+     productores_new.nombre
+
+     FROM
+     fincas
+     INNER JOIN provcenso2010 ON fincas.provinciaEstablecimiento = provcenso2010.PROV
+     INNER JOIN muncenso2010 ON fincas.provinciaEstablecimiento = muncenso2010.PROV AND fincas.municipioEstablecimiento = muncenso2010.MUN
+     INNER JOIN dmcenso2010 ON fincas.provinciaEstablecimiento = dmcenso2010.PROV AND fincas.municipioEstablecimiento = dmcenso2010.MUN AND fincas.distrito = dmcenso2010.DM
+     INNER JOIN seccenso2010 ON fincas.provinciaEstablecimiento = seccenso2010.PROV AND fincas.municipioEstablecimiento = seccenso2010.MUN AND fincas.distrito = seccenso2010.DM AND fincas.seccion = seccenso2010.SECC
+     LEFT JOIN bpcenso2010 ON fincas.provinciaEstablecimiento = bpcenso2010.PROV AND fincas.municipioEstablecimiento = bpcenso2010.MUN AND fincas.distrito = bpcenso2010.DM AND fincas.seccion = bpcenso2010.SECC AND fincas.barrioParaje = bpcenso2010.BP
+     LEFT JOIN productores_new ON fincas.cedulaRepresentanteLegal = productores_new.cedula
+     WHERE
+     fincas.ID =  $id
+     ");
+     //echo $sql;
+     $res = DB::select($sql);
+     if($res){
+        return response()->json($res[0],200,[],JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+     }else{
+       return $sql;
+     }
+    }
+
+    public function getfincasWithProd($provincia="",$municipio="",$region="",$barrio="",$distrito="",$seccion=""){
+        if($region!=""){
+            $region = "WHERE fincas.REG= $region";
+        }
+        if($provincia!=""){
+            $provincia = " AND fincas.provinciaEstablecimiento=$provincia";
+        }
+        if($municipio!=""){
+            $municipio = " AND fincas.lmunicipioEstablecimiento=$municipio";
+        }
+        /**TODO***
+         *
+         * TRANSFORMACIONES DEL QUERY PARA LAS DEMAS VARIABLES
+        */
+      $sql = DB::raw("SELECT
+     fincas.*,
+     provcenso2010.TOPONIMIA as PROVINCIA,
+     muncenso2010.TOPONIMIA as MUNICIPIO,
+     dmcenso2010.TOPONIMIA as DISTRITO,
+     seccenso2010.TOPONIMIA as SECCION,
+     bpcenso2010.TOPONIMIA as BARRIO,
+     productores_new.apellidos,
+     productores_new.apodo,
+     productores_new.telefono,
+     productores_new.celular,
+     productores_new.correo,
+     productores_new.Fecha_Nacimiento,
+     productores_new.cedula,
+     productores_new.nombre
+
+     FROM
+     fincas
+     INNER JOIN provcenso2010 ON fincas.provinciaEstablecimiento = provcenso2010.PROV
+     INNER JOIN muncenso2010 ON fincas.provinciaEstablecimiento = muncenso2010.PROV AND fincas.municipioEstablecimiento = muncenso2010.MUN
+     INNER JOIN dmcenso2010 ON fincas.provinciaEstablecimiento = dmcenso2010.PROV AND fincas.municipioEstablecimiento = dmcenso2010.MUN AND fincas.distrito = dmcenso2010.DM
+     INNER JOIN seccenso2010 ON fincas.provinciaEstablecimiento = seccenso2010.PROV AND fincas.municipioEstablecimiento = seccenso2010.MUN AND fincas.distrito = seccenso2010.DM AND fincas.seccion = seccenso2010.SECC
+     LEFT JOIN bpcenso2010 ON fincas.provinciaEstablecimiento = bpcenso2010.PROV AND fincas.municipioEstablecimiento = bpcenso2010.MUN AND fincas.distrito = bpcenso2010.DM AND fincas.seccion = bpcenso2010.SECC AND fincas.barrioParaje = bpcenso2010.BP
+     LEFT JOIN productores_new ON fincas.cedulaRepresentanteLegal = productores_new.cedula
+    $region $provincia $municipio");
+    $res = DB::select($sql);
+     return response()->json($res,200,[],JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+    }
 
 }

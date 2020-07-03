@@ -9,7 +9,7 @@ class DivisionTerritorial extends Controller
 {
     //
     public function ListRegiones(){
-        $res = DB::table('Regiones')->get();
+        $res = DB::table('regiones')->get();
         return response()->json($res,200,[],JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
     }
 
@@ -52,4 +52,8 @@ class DivisionTerritorial extends Controller
         return response()->json($res,200,[],JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
     }
     public function ListSubBarrios(string $provincia,string $municipio,string $distrito,string $seccion, string $barrio){}
+    public function ListaNacionalidad(){
+        $res = DB::table('Nacionalidad')->get();
+        return response()->json($res,200,[],JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+    }
 }

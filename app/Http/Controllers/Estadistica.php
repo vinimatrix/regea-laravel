@@ -16,9 +16,9 @@ class Estadistica extends Controller
         $b='';
         $c='';
         if ($region!='') {
-            $a = "WHERE REG ='$region'";
-            $b = "AND REG ='$region'";
-            $c=$a;
+            $a = "WHERE a.REG ='$region'";
+            $b = "AND a.REG ='$region'";
+            $c=  "WHERE b.REG ='$region'";
         }
 
         if ($provincia!='') {

@@ -80,7 +80,16 @@ class Productores extends Controller
     }
 
     public function getById($id){
-        $res = DB::table('productores_new')->where('Id',$id)->get();
+        $sql = DB::raw("SELECT
+        productores_new.*,
+        muncenso2010.TOPONIMIA as MUNICIPIO,
+        provcenso2010.TOPONIMIA as PROVINCIA
+        FROM
+        productores_new
+        LEFT JOIN muncenso2010 ON productores_new.MUN = muncenso2010.MUN AND productores_new.PROV = muncenso2010.PROV
+        LEFT JOIN provcenso2010 ON productores_new.PROV = provcenso2010.PROV where productores_new.Id = $id");
+        $res = DB::select($sql);
+        //$res = DB::table('productores_new')->where('Id',$id)->get();
         if($res!=null){
         $fincas = DB::table('fincas')
         ->where('cedulaRepresentanteLegal',$res[0]->cedula)
